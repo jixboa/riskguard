@@ -14,7 +14,6 @@ import Corporate from "./components/indicators/corporate";
 import ItemsManager from "./components/managementtools/item";
 import ScoreManager from "./components/managementtools/score";
 import IndicatorManager from "./components/managementtools/indicator";
-import Sidebar from "./components/navigators/Sidebar";
 
 import { getIndicators } from "./store/actions/indicatorAction";
 import { loadUser } from "./store/actions/authAction";
@@ -27,39 +26,29 @@ import { Container } from "@material-ui/core";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-//import BounceLoader from "react-spinners/BounceLoader";
-import MoonLoader from "react-spinners/MoonLoader";
+import BounceLoader from "react-spinners/BounceLoader";
 
 import backgroundImage from "./docs/backgd.jpg";
 
-//import { makeStyles, ThemeProvider } from "@material-ui/styles";
-import {
-  createTheme,
-  ThemeProvider,
-  makeStyles,
-} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
+import "@fontsource/roboto/400.css";
 
-import "@fontsource/roboto/500.css";
-
-const theme = createTheme();
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   containerStyle: {
-    justifyContent: "center",
-    [theme.breakpoints.down("sm")]: {
-      marginTop: "56px",
-      backgroundImage: `url(${backgroundImage})`,
-    },
+    position: "fixed",
+    top: 0,
+    left: 0,
+    height: "100vh",
+    overflow: "auto", // Add overflow auto to enable scrolling
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: "cover",
+    backgroundAttachment: "scroll", // Set the background attachment to scroll
   },
   contentStyle: {
-    padding: "24px",
-    [theme.breakpoints.down("sm")]: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
-      maxWidth: "xl",
-      margin: "0 auto",
-    },
+    margin: "50px auto",
+    padding: "20px",
   },
-}));
+});
 
 function App() {
   const classes = useStyles();
@@ -112,49 +101,36 @@ function App() {
           alignItems: "center",
           height: "100vh",
         }}>
-        <MoonLoader color="#0d75a8" />
+        <BounceLoader color="#0d75a8" />
       </div>
     );
   }
 
   return (
-    <>
-      {!loading && (
-        <ThemeProvider theme={theme}>
-          <div className="App">
-            <BrowserRouter>
-              <ToastContainer />
-              <Sidebar />
-              <Container
-                className={classes.containerStyle}
-                style={{ backgroundColor: "#f2f9f8" }}
-                maxWidth="xl">
-                <Container className={classes.contentStyle} maxWidth="xl">
-                  <Routes>
-                    <Route path="/" exact element={<SignIn />} />
-                    <Route path="/signin" exact element={<SignIn />} />
-                    <Route path="/signup" exact element={<SignUp />} />
-                    <Route path="/indprofiler" exact element={<Individual />} />
-                    <Route path="/corprofiler" exact element={<Corporate />} />
-                    <Route path="/nested" exact element={<NestedGrid />} />
-                    <Route path="/candidates" exact element={<Candidates />} />
-                    <Route path="/items" exact element={<ItemsManager />} />
-                    <Route path="/scores" exact element={<ScoreManager />} />
-                    <Route
-                      path="/indicators"
-                      exact
-                      element={<IndicatorManager />}
-                    />
-                  </Routes>
-                </Container>
+    <div className="App">
+      <BrowserRouter>
+        <ToastContainer />
+        <NavBar />
+        <Container className={classes.containerStyle} maxWidth="xl">
+          <Container className={classes.contentStyle} maxWidth="xl">
+            <Routes>
+              <Route path="/" exact element={<SignIn />} />
+              <Route path="/signin" exact element={<SignIn />} />
+              <Route path="/signup" exact element={<SignUp />} />
+              <Route path="/indprofiler" exact element={<Individual />} />
+              <Route path="/corprofiler" exact element={<Corporate />} />
+              <Route path="/nested" exact element={<NestedGrid />} />
+              <Route path="/candidates" exact element={<Candidates />} />
+              <Route path="/items" exact element={<ItemsManager />} />
+              <Route path="/scores" exact element={<ScoreManager />} />
+              <Route path="/indicators" exact element={<IndicatorManager />} />
+            </Routes>
+          </Container>
 
-                <Footer />
-              </Container>
-            </BrowserRouter>
-          </div>
-        </ThemeProvider>
-      )}
-    </>
+          <Footer />
+        </Container>
+      </BrowserRouter>
+    </div>
   );
 }
 

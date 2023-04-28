@@ -1,0 +1,30 @@
+MODULES
+ -- USER AUTHENTICATION 
+        SignUp, SignIn, Admin & user
+        (users)
+ --RISK MANAGEMENT TOOLS
+        indicator manager,item manager, score manager
+        (indicator_m, items_m, score_m, )
+
+              INDICATOR_M(type, indicator_name)
+              ITEM_M(indicator_type, item_description, item_score)
+              SCORE_M(score_points, risk_range)
+
+
+ -- DASHBOARD
+        Admin Home page
+ --INDIVIDUAL RISK ASSESSMENT
+        indvidual profiler
+        (profiller)
+ --CORPORATE RISK ASSESSMENT
+        corporate profiler
+        (profiller)
+ --BRANCH MANAGER
+       branch master
+ --REPORTS
+
+
+
+----Branch @add_user
+----Password change(user)
+----Password reset(Admin)
