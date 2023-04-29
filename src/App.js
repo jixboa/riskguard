@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
+  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   let [color, setColor] = useState("#35acce");
