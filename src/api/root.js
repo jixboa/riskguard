@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const BASE_URL = "http://localhost:5000/api";
-export const CYCLIC_URL = "https://delightful-scarf-deer.cyclic.app/api";
+export const CYCLIC_URL = "https://riskguardserv.cyclic.app/api";
 
 const root = () => {
   return axios.create({

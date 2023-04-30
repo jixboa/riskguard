@@ -236,11 +236,17 @@ const Individual = () => {
             {/* content */}
           </div>
           <div>
-            <div style={{ marginRight: "40px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginRight: "40px",
+              }}>
               <PowerSettingsNewOutlinedIcon
                 onClick={() => HandleSignOut()}
                 color="action"
               />
+              <Typography style={{ color: "grey" }}>{auth.fname}</Typography>
             </div>
             {/* this div is at far right */}
             {/* content */}
