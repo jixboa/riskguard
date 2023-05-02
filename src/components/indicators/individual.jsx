@@ -18,13 +18,22 @@ import { LockOutlined } from "@mui/icons-material";
 import { Container } from "@material-ui/core";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+import { styled, alpha } from "@mui/material/styles";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { AccountCircle } from "@mui/icons-material";
 import Badge from "@mui/material/Badge";
 import BadgeIcon from "@mui/icons-material/Badge";
 import HouseSidingRoundedIcon from "@mui/icons-material/HouseSidingRounded";
 import NumbersRoundedIcon from "@mui/icons-material/NumbersRounded";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import PersonIcon from "@mui/icons-material/Person";
+import CreditScoreIcon from "@mui/icons-material/CreditScore";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Divider from "@mui/material/Divider";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -33,10 +42,54 @@ import TableContainer from "@mui/material/TableContainer";
 //import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import ButtonBase from "@material-ui/core";
 
 import { AppBar, Toolbar } from "@material-ui/core";
 
 const drawerWidth = 200;
+
+const StyledMenu = styled((props) => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "right",
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "right",
+    }}
+    {...props}
+  />
+))(({ theme }) => ({
+  "& .MuiPaper-root": {
+    borderRadius: 6,
+    marginTop: theme.spacing(1),
+    minWidth: 180,
+    color:
+      theme.palette.mode === "light"
+        ? "rgb(55, 65, 81)"
+        : theme.palette.grey[300],
+    boxShadow:
+      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+    "& .MuiMenu-list": {
+      padding: "4px 0",
+    },
+    "& .MuiMenuItem-root": {
+      "& .MuiSvgIcon-root": {
+        fontSize: 18,
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(1.5),
+      },
+      "&:active": {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          theme.palette.action.selectedOpacity
+        ),
+      },
+    },
+  },
+}));
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -103,6 +156,15 @@ const Individual = () => {
   const [branch, setBranch] = useState(0);
   //const [selectedItems, setSelectedItems] = useState({});
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const handleDescriptionChange = (indicatorId, indicatorName, value) => {
     const selectedItem = items.find((item) => item.item_description === value);
     const indName = indicatorName.toLowerCase().replace(/\s+/g, "_");
@@ -123,6 +185,7 @@ const Individual = () => {
       ["account_no"]: accountNo,
       ["nid"]: nid,
       ["branch"]: branch,
+      ["total_score"]: score,
     }));
 
     setScore(score + parseInt(selectedItem.score));
@@ -132,12 +195,10 @@ const Individual = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(newDescriptions);
-    console.log(newDescriptions.fullname);
     dispatch(addIndProfile(newDescriptions));
   };
 
-  const currencies = [
+  const branches = [
     {
       value: "Head Office",
       label: "Head Office",
@@ -242,11 +303,57 @@ const Individual = () => {
                 alignItems: "center",
                 marginRight: "40px",
               }}>
-              <PowerSettingsNewOutlinedIcon
-                onClick={() => HandleSignOut()}
-                color="action"
-              />
-              <Typography style={{ color: "grey" }}>{auth.fname}</Typography>
+              <>
+                <>
+                  <Button
+                    id="demo-customized-button"
+                    aria-controls={open ? "demo-customized-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    variant="text"
+                    disableElevation
+                    onClick={handleClick}
+                    endIcon={<KeyboardArrowDownIcon />}
+                    startIcon={
+                      <Avatar
+                        src={auth.fname}
+                        style={{ width: "24px", height: "24px" }}
+                      />
+                    }
+                    style={{ color: "#16315c" }}>
+                    {auth.fname}
+                  </Button>
+                </>
+
+                <StyledMenu
+                  id="demo-customized-menu"
+                  MenuListProps={{
+                    "aria-labelledby": "demo-customized-button",
+                  }}
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                    }}
+                    disableRipple>
+                    <CreditScoreIcon />
+                    <Link className={classes.linkStyle} to="/#">
+                      Change Password
+                    </Link>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      HandleSignOut();
+                    }}
+                    disableRipple>
+                    <PowerSettingsNewOutlinedIcon />
+                    <Typography>Signout</Typography>
+                  </MenuItem>
+                </StyledMenu>
+              </>
             </div>
             {/* this div is at far right */}
             {/* content */}
@@ -400,7 +507,7 @@ const Individual = () => {
                     onChange={(e) => {
                       setBranch(e.target.value);
                     }}>
-                    {currencies.map((option) => (
+                    {branches.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
                       </MenuItem>

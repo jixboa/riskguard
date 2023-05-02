@@ -11,22 +11,66 @@ import { CssBaseline, FormControlLabel, Avatar } from "@material-ui/core";
 // import FormControlLabel from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Box from "@mui/material/Box";
-import { LockOutlined } from "@mui/icons-material";
+import { LockOutlined, SettingsAccessibility } from "@mui/icons-material";
 import { Container } from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import { AppBar, Toolbar } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+
+import {
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton,
+  Divider,
+} from "@material-ui/core";
+import Pagination from "@mui/material/Pagination";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { Edit, Delete } from "@material-ui/icons";
 
 const drawerWidth = 200;
 
 const useStyles = makeStyles((theme) => ({
+  search: {
+    display: "flex",
+    justifyContent: "flex-end",
+    marginBottom: theme.spacing(1),
+  },
+  searchField: {
+    width: 200,
+  },
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    marginTop: "50px",
+  },
+  item: {
+    flex: "none",
+    marginBottom: theme.spacing(1),
+  },
+  pagination: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: theme.spacing(2),
+  },
+  listItem: {
+    marginBottom: theme.spacing(1),
+  },
+  actionColumn: {
+    width: 80,
+    textAlign: "center",
+  },
   root: {
     textAlign: "center",
     display: "flex",
-
+    margin: "auto",
     alignItems: "flex-end",
-    width: "100%",
+    maxWidth: 800,
     height: "max-content",
   },
 
@@ -39,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: `url(${"../Votes/back.jpg"})`,
   },
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(1),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -54,12 +98,26 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    backgroundColor: "green",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "darkgreen",
+    },
   },
+
+  cancel: {
+    margin: theme.spacing(3, 0, 2),
+
+    color: "white",
+  },
+
   appbarStyle: {
     background: "#f2f9f8",
     elevation: 0,
   },
 }));
+
+const itemsPerPage = 5;
 
 const Etitles = [
   {
@@ -74,8 +132,35 @@ const Etitles = [
 const SignUp = () => {
   const classes = useStyles();
   const auth = useSelector((state) => state.auth);
+  const users = useSelector((state) => state.users);
+  /*   console.log(auth);
+  console.log(users); */
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [page, setPage] = useState(1);
+  const [showForm, setShowForm] = useState(false);
+
+  const [searchText, setSearchText] = useState("");
+
+  const handleChangePage = (event, value) => {
+    setPage(value);
+  };
+
+  const handleSearchTextChange = (event) => {
+    setSearchText(event.target.value);
+    setPage(1); // reset page to 1 when searching
+  };
+
+  const filteredItems = users.filter((user) =>
+    user.fname.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  const startIndex = (page - 1) * itemsPerPage;
+  const displayedItems = filteredItems.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   // console.log(auth)
   const [user, setUser] = useState({
@@ -104,6 +189,10 @@ const SignUp = () => {
     }); */
   };
 
+  const handleCancel = () => {
+    setShowForm(false);
+  };
+
   const HandleSignOut = () => {
     //signOut the user
     dispatch(signOut());
@@ -113,7 +202,7 @@ const SignUp = () => {
   if (auth.role !== "admin") return <Navigate to="/signin" />;
 
   return (
-    <Container component="main" className={classes.root} maxWidth="xs">
+    <Container component="main" className={classes.container} maxWidth="sm">
       <AppBar
         elevation={0}
         className={classes.appbarStyle}
@@ -144,113 +233,199 @@ const SignUp = () => {
         </Toolbar>
       </AppBar>
       <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlined />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Add new user
-        </Typography>
-        <form
-          className={classes.form}
-          noValidate
-          onSubmit={handleSubmit}
-          autoComplete="off">
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-                value={user.fname}
-                onChange={(e) => setUser({ ...user, fname: e.target.value })}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-                value={user.lname}
-                onChange={(e) => setUser({ ...user, lname: e.target.value })}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                value={user.email}
-                onChange={(e) => setUser({ ...user, email: e.target.value })}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                value={user.password}
-                onChange={(e) => setUser({ ...user, password: e.target.value })}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                id="outlined-select-title"
-                select
-                label="Select Role"
-                variant="outlined"
-                required
-                fullWidth
-                value={user.role}
-                onChange={handleTitleChange}
-                helperText="Select role">
-                {Etitles.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            {/* <Grid item xs={12}>
+      <Container maxWidth="lg" className={classes.container}>
+        <div className={classes.item}>
+          <Box mt={2}>
+            {!showForm && (
+              <>
+                <div className={classes.search}>
+                  <TextField
+                    label="Search"
+                    value={searchText}
+                    onChange={handleSearchTextChange}
+                    className={classes.searchField}
+                    size="small"
+                  />
+                </div>
+                <List>
+                  {displayedItems.map((user) => (
+                    <React.Fragment key={user._id}>
+                      <ListItem className={classes.listItem}>
+                        <ListItemAvatar>
+                          <Avatar src={user.fname} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={user.fname}
+                          secondary={user.role}
+                        />
+                        <div className={classes.actionsColumn}>
+                          <IconButton href={user._id}>
+                            <Edit />
+                          </IconButton>
+                          <IconButton href={user._id}>
+                            <Delete />
+                          </IconButton>
+                        </div>
+                      </ListItem>
+                      <Divider variant="inset" />
+                    </React.Fragment>
+                  ))}
+                </List>
+
+                <div
+                  className={classes.pagination}
+                  style={{ marginBottom: "20px" }}>
+                  <Pagination
+                    count={Math.ceil(filteredItems.length / itemsPerPage)}
+                    page={page}
+                    onChange={handleChangePage}
+                  />
+                </div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<AddIcon />}
+                  onClick={() => setShowForm(true)}>
+                  Add User
+                </Button>
+              </>
+            )}
+            {showForm && (
+              <Box mt={2}>
+                <div className={classes.paper}>
+                  <Avatar className={classes.avatar}>
+                    <LockOutlined />
+                  </Avatar>
+                  <Typography component="h1" variant="h5">
+                    Add new user
+                  </Typography>
+                  <form
+                    className={classes.form}
+                    noValidate
+                    onSubmit={handleSubmit}
+                    autoComplete="off">
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          autoComplete="fname"
+                          name="firstName"
+                          variant="outlined"
+                          required
+                          fullWidth
+                          id="firstName"
+                          label="First Name"
+                          autoFocus
+                          value={user.fname}
+                          onChange={(e) =>
+                            setUser({ ...user, fname: e.target.value })
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          variant="outlined"
+                          required
+                          fullWidth
+                          id="lastName"
+                          label="Last Name"
+                          name="lastName"
+                          autoComplete="lname"
+                          value={user.lname}
+                          onChange={(e) =>
+                            setUser({ ...user, lname: e.target.value })
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          variant="outlined"
+                          required
+                          fullWidth
+                          id="email"
+                          label="Email Address"
+                          name="email"
+                          value={user.email}
+                          onChange={(e) =>
+                            setUser({ ...user, email: e.target.value })
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          variant="outlined"
+                          required
+                          fullWidth
+                          name="password"
+                          label="Password"
+                          type="password"
+                          id="password"
+                          value={user.password}
+                          onChange={(e) =>
+                            setUser({ ...user, password: e.target.value })
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          id="outlined-select-title"
+                          select
+                          label="Select Role"
+                          variant="outlined"
+                          required
+                          fullWidth
+                          value={user.role}
+                          onChange={handleTitleChange}
+                          helperText="Select role">
+                          {Etitles.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Grid>
+                      {/* <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive inspiration, marketing promotions and updates via email."
               />
             </Grid> */}
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}>
-            Add
-          </Button>
-          {/* <Grid container justifyContent="flex-end">
+                      <Grid item xs={12} sm={6}>
+                        <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          color="primary"
+                          className={classes.submit}>
+                          Add
+                        </Button>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Button
+                          type="cancel"
+                          fullWidth
+                          variant="contained"
+                          color="primary"
+                          onClick={handleCancel}
+                          className={classes.cancel}>
+                          Cancel
+                        </Button>
+                      </Grid>
+                    </Grid>
+                    {/* <Grid container justifyContent="flex-end">
             <Grid item>
               <Link className={classes.linkStyle} to="/signin" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
           </Grid> */}
-        </form>
-      </div>
+                  </form>
+                </div>
+              </Box>
+            )}
+          </Box>
+        </div>
+        {/* Add more items as needed */}
+      </Container>
     </Container>
   );
 };

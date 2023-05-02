@@ -20,6 +20,7 @@ import { getIndicators } from "./store/actions/indicatorAction";
 import { loadUser } from "./store/actions/authAction";
 import { getScores } from "./store/actions/scoreAction";
 import { getItems } from "./store/actions/itemAction";
+import { getUsers } from "./store/actions/usersAction";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Container } from "@material-ui/core";
@@ -67,6 +68,15 @@ function App() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   let [color, setColor] = useState("#35acce");
+
+  useEffect(() => {
+    const loadData = async () => {
+      await dispatch(getUsers());
+      setLoading(false);
+    };
+
+    loadData().catch(() => setLoading(false));
+  }, [dispatch]);
 
   useEffect(() => {
     const loadData = async () => {

@@ -6,6 +6,7 @@ import scoreReducer from "./scoreReducer";
 import itemReducer from "./itemReducer";
 import indProfilerReducer from "./indProfilerReducer";
 import corpProfilerReducer from "./copProfilerReducer";
+import usersReducer from "./usersReducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   items: itemReducer,
   indprofiles: indProfilerReducer,
   corpprofiles: corpProfilerReducer,
+  users: usersReducer,
 });
 
 export default rootReducer;

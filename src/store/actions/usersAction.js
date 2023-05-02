@@ -3,14 +3,14 @@ import API from "../../api/root";
 import { toast } from "react-toastify";
 import { setHeaders } from "../../api";
 
-export const getIndProfiles = () => {
+export const getUsers = () => {
   return (dispatch) => {
     API()
-      .get("/indprofiles", setHeaders())
-      .then((ind_profiles) => {
+      .get("/signup", setHeaders())
+      .then((users) => {
         dispatch({
-          type: "GET_IND_PROFILES",
-          ind_profiles,
+          type: "GET_USERS",
+          users,
         });
       })
       .catch((error) => {
@@ -23,16 +23,16 @@ export const getIndProfiles = () => {
   };
 };
 
-export const addIndProfile = (formData) => (dispatch, getState) =>
+export const addItem = (formData) => (dispatch, getState) =>
   new Promise((resolve, reject) => {
     API()
-      .post("/indprofiles", formData, setHeaders())
-      .then((ind_profile) => {
+      .post("/items", formData, setHeaders())
+      .then((item) => {
         dispatch({
-          type: "ADD_IND_PROFILE",
-          ind_profile,
+          type: "ADD_ITEM",
+          item,
         });
-        resolve(ind_profile);
+        resolve(item);
       })
       .catch((error) => {
         const errors = error.response?.data;
@@ -44,13 +44,13 @@ export const addIndProfile = (formData) => (dispatch, getState) =>
       });
   });
 
-export const deleteIndProfile = (ids) => {
+export const deleteItem = (ids) => {
   return (dispatch) => {
     API()
-      .delete(`/indprofiles/${ids}`, setHeaders())
+      .delete(`/items/${ids}`, setHeaders())
       .then(() => {
         dispatch({
-          type: "DELETE_IND_PROFILE",
+          type: "DELETE_ITEM",
           payload: { ids },
         });
       })
@@ -63,14 +63,14 @@ export const deleteIndProfile = (ids) => {
   };
 };
 
-export const editIndProfile = (formData, id) => {
+export const editItem = (formData, id) => {
   return (dispatch) => {
     API()
-      .put(`/indprofiles/${id}`, formData, setHeaders())
-      .then((ind_profile) => {
+      .put(`/items/${id}`, formData, setHeaders())
+      .then((item) => {
         dispatch({
-          type: "UPDATE_IND_PROFILE",
-          ind_profile,
+          type: "UPDATE_ITEM",
+          item,
         });
       })
       .catch((error) => {
