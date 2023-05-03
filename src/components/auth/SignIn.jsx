@@ -16,10 +16,10 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@material-ui/core";
-import riskLogo from "../../docs/riskLogo.png";
 import LockPersonIcon from "@mui/icons-material/LockPerson";
 
 import backgroundImage from "../../docs/backgd.jpg";
+import riskLogo from "../../docs/guardian.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,11 +87,9 @@ const SignIn = () => {
         {/* <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square> */}
         <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockPersonIcon />
-          </Avatar>
+          <img src={riskLogo} alt="Logo" style={{ height: "80px" }} />
 
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h6">
             Sign in
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
