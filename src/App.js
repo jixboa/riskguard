@@ -15,12 +15,15 @@ import ItemsManager from "./components/managementtools/item";
 import ScoreManager from "./components/managementtools/score";
 import IndicatorManager from "./components/managementtools/indicator";
 import Sidebar from "./components/navigators/Sidebar";
+import IndProfiles from "./components/reports/indprofiles";
 
 import { getIndicators } from "./store/actions/indicatorAction";
 import { loadUser } from "./store/actions/authAction";
 import { getScores } from "./store/actions/scoreAction";
 import { getItems } from "./store/actions/itemAction";
 import { getUsers } from "./store/actions/usersAction";
+import { getIndProfiles } from "./store/actions/indProfilerAction";
+import IndProfileDetails from "./components/reports/IndProfileDetails";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Container } from "@material-ui/core";
@@ -68,6 +71,17 @@ function App() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   let [color, setColor] = useState("#35acce");
+
+  const [isIndProfileDetailsOpen, setIsIndProfileDetailsOpen] = useState(false);
+
+  useEffect(() => {
+    const loadData = async () => {
+      await dispatch(getIndProfiles());
+      setLoading(false);
+    };
+
+    loadData().catch(() => setLoading(false));
+  }, [dispatch]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -135,7 +149,7 @@ function App() {
           <div className="App">
             <BrowserRouter>
               <ToastContainer />
-              <Sidebar />
+              {!isIndProfileDetailsOpen && <Sidebar />}
               <Container
                 className={classes.containerStyle}
                 style={{ backgroundColor: "#f2f9f8" }}
@@ -151,15 +165,30 @@ function App() {
                     <Route path="/candidates" exact element={<Candidates />} />
                     <Route path="/items" exact element={<ItemsManager />} />
                     <Route path="/scores" exact element={<ScoreManager />} />
+                    <Route path="/scores" exact element={<ScoreManager />} />
                     <Route
                       path="/indicators"
                       exact
                       element={<IndicatorManager />}
                     />
+                    <Route
+                      path="/indprofiles"
+                      exact
+                      element={<IndProfiles />}
+                    />
+                    <Route
+                      path="/indprofiledetails/:id"
+                      element={
+                        <IndProfileDetails
+                          setIsIndProfileDetailsOpen={
+                            setIsIndProfileDetailsOpen
+                          }
+                        />
+                      }
+                    />
                   </Routes>
                 </Container>
-
-                <Footer />
+                {!isIndProfileDetailsOpen && <Footer />}
               </Container>
             </BrowserRouter>
           </div>

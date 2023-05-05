@@ -372,36 +372,26 @@ export default function Sidebar() {
                                 <CreditScoreIcon />
                                 <Link
                                   className={classes.linkStyle}
-                                  to="/scores">
-                                  Score Manager
+                                  to="/indprofiles">
+                                  Individual Profiles
                                 </Link>
                               </MenuItem>
                               <MenuItem onClick={handleClose} disableRipple>
                                 <FileCopyIcon />
                                 <Link
                                   className={classes.linkStyle}
-                                  to="/indicators">
-                                  Indicator Manager
+                                  to="/corpprofiles">
+                                  Corporate Profiles
                                 </Link>
                               </MenuItem>
                               <Divider sx={{ my: 0.5 }} />
                               <MenuItem onClick={handleClose} disableRipple>
                                 <ArchiveIcon />
-                                <Link className={classes.linkStyle} to="/items">
-                                  Items Manager
-                                </Link>
-                              </MenuItem>
-                              <MenuItem onClick={handleClose} disableRipple>
-                                <PersonIcon />
                                 <Link
                                   className={classes.linkStyle}
-                                  to="/signup">
-                                  Users
+                                  to="/otherreports">
+                                  Other Reports
                                 </Link>
-                              </MenuItem>
-                              <MenuItem onClick={handleClose} disableRipple>
-                                <MoreHorizIcon />
-                                Reports
                               </MenuItem>
                             </StyledMenu>
                           </>

@@ -43,6 +43,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import ButtonBase from "@material-ui/core";
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
 
 import { AppBar, Toolbar } from "@material-ui/core";
 
@@ -362,7 +364,7 @@ const Individual = () => {
       </AppBar>
       <CssBaseline />
       <div className={classes.paper}>
-        <Grid
+        {/* <Grid
           container
           spacing={2}
           style={{ marginBottom: "px", marginTop: "150px" }}>
@@ -429,7 +431,16 @@ const Individual = () => {
               </div>
             </>
           </Grid>
-        </Grid>
+        </Grid> */}
+        <Stack
+          direction="row"
+          spacing={2}
+          style={{ marginBottom: "px", marginTop: "150px" }}>
+          <Chip label="Up to 34: Low Risk" color="info" />
+          <Chip label="35-74: Medium Risk" color="success" />
+          <Chip label="Above 74: High Risk" color="warning" />
+        </Stack>
+
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid
             container

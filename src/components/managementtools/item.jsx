@@ -101,6 +101,18 @@ const useStyles = makeStyles((theme) => ({
     background: "#f2f9f8",
     elevation: 0,
   },
+  root: {
+    "& .MuiTableRow-root:not(:last-child)": {
+      borderBottom: `1px solid ${theme.palette.divider}`,
+      backgroundColor: "transparent",
+    },
+    "& .MuiTableCell-root": {
+      padding: theme.spacing(2, 2),
+    },
+    "& .MuiPaper-root": {
+      backgroundColor: "transparent",
+    },
+  },
 }));
 
 const Indicators = [
@@ -474,21 +486,23 @@ const ItemsManager = () => {
           <div>
             <CacheProvider value={muiCache} style={{ margintop: "20px" }}>
               <ThemeProvider theme={createTheme()}>
-                <MUIDataTable
-                  title={
-                    <Typography variant="h6">
-                      Indicators Descriptions
-                    </Typography>
-                  }
-                  data={tableData}
-                  columns={columns}
-                  options={options}
-                  classes={{
-                    row: {
-                      root: classes.tableRow,
-                    },
-                  }}
-                />
+                <div className={classes.root}>
+                  <MUIDataTable
+                    title={
+                      <Typography variant="h6">
+                        Indicators Descriptions
+                      </Typography>
+                    }
+                    data={tableData}
+                    columns={columns}
+                    options={options}
+                    classes={{
+                      row: {
+                        root: classes.tableRow,
+                      },
+                    }}
+                  />
+                </div>
               </ThemeProvider>
             </CacheProvider>
           </div>
